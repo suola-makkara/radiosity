@@ -261,10 +261,10 @@ void GUI::mainMenuBar()
 			{
 #ifndef NO_FILESYSTEM_LIB
 				for (auto &file :
-						std::filesystem::directory_iterator("scenes"))
+						directory_iterator("scenes"))
 				{
 					if (file.path().extension() ==
-							std::filesystem::path(".sc"))
+							path(".sc"))
 						if (ImGui::MenuItem(file.path()
 									.filename().c_str()))
 							Scene::load(file.path());
