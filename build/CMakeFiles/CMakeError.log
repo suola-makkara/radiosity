@@ -1,0 +1,51 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/roope/programs/c++/radiosity/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_7ec66/fast"
+/usr/bin/make -f CMakeFiles/cmTC_7ec66.dir/build.make CMakeFiles/cmTC_7ec66.dir/build
+make[1]: Entering directory '/home/roope/programs/c++/radiosity/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7ec66.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_7ec66.dir/CheckSymbolExists.c.o   -c /home/roope/programs/c++/radiosity/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_7ec66
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7ec66.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_7ec66.dir/CheckSymbolExists.c.o  -o cmTC_7ec66 
+/usr/bin/ld: CMakeFiles/cmTC_7ec66.dir/CheckSymbolExists.c.o: in function `main':
+CheckSymbolExists.c:(.text+0x1b): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_7ec66.dir/build.make:87: cmTC_7ec66] Error 1
+make[1]: Leaving directory '/home/roope/programs/c++/radiosity/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_7ec66/fast] Error 2
+
+File /home/roope/programs/c++/radiosity/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/roope/programs/c++/radiosity/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_4c187/fast"
+/usr/bin/make -f CMakeFiles/cmTC_4c187.dir/build.make CMakeFiles/cmTC_4c187.dir/build
+make[1]: Entering directory '/home/roope/programs/c++/radiosity/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4c187.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_4c187.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.12/Modules/CheckFunctionExists.c
+Linking C executable cmTC_4c187
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4c187.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_4c187.dir/CheckFunctionExists.c.o  -o cmTC_4c187 -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_4c187.dir/build.make:87: cmTC_4c187] Error 1
+make[1]: Leaving directory '/home/roope/programs/c++/radiosity/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_4c187/fast] Error 2
+
+
