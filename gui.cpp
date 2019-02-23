@@ -1,6 +1,15 @@
 #include <climits>
-#include <filesystem>
 #include <iostream>
+
+#if defined __GNUC__
+	#include <filesystem>
+	using namespace std::filesystem;
+#elif defined _MSC_VER
+	#include <experimental/filesystem>
+	using namespace std::experimental::filesystem::v1;
+#else
+	#define NO_FILESYSTEM_LIB
+#endif
 
 #include "gui.hpp"
 #include "scene.hpp"
@@ -250,6 +259,7 @@ void GUI::mainMenuBar()
 
 			if (ImGui::BeginMenu("Open"))
 			{
+#ifndef NO_FILESYSTEM_LIB
 				for (auto &file :
 						std::filesystem::directory_iterator("scenes"))
 				{
@@ -259,6 +269,7 @@ void GUI::mainMenuBar()
 									.filename().c_str()))
 							Scene::load(file.path());
 				}
+#endif
 				ImGui::EndMenu();
 			}
 
