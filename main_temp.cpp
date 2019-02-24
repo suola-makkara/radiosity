@@ -8,9 +8,15 @@
 #include "render_engine.hpp"
 #include "scene.hpp"
 #include "settings.hpp"
+#include "editor.hpp"
 
 void windowCloseCallback(GLFWwindow *window);
 void windowSizeCallback(GLFWwindow *window, int widht, int height);
+
+void cursorPositionCallback(GLFWwindow *window, double posX, double posY);
+void mouseButtonCallback(GLFWwindow *window, int button,
+		int action, int mods);
+
 void keyCallback(GLFWwindow *window, int key, int scancode,
 		int action, int mods);
 
@@ -26,6 +32,9 @@ int main()
 
 	glfwSetWindowCloseCallback(window, windowCloseCallback);
 	glfwSetWindowSizeCallback(window, windowSizeCallback);
+
+	glfwSetCursorPosCallback(window, cursorPositionCallback);
+	glfwSetMouseButtonCallback(window, mouseButtonCallback);
 
 	glfwSetKeyCallback(window, keyCallback);
 
@@ -45,7 +54,8 @@ int main()
 	{
 		glfwPollEvents();
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |
+				GL_STENCIL_BUFFER_BIT);
 
 		RenderEngine::updateCamera(window);
 
@@ -75,6 +85,28 @@ void windowSizeCallback(GLFWwindow *window, int width, int height)
 	Settings::windowWidth = width;
 	Settings::windowHeight = height;
 	glViewport(0, 0, width, height);
+}
+
+void cursorPositionCallback(GLFWwindow *window, double posX, double posY)
+{
+	if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) &&
+			!ImGui::IsAnyItemActive() &&
+			!RenderEngine::isCameraEnabled())
+		Editor::findHoveredObject(window);
+	else
+		Editor::setHoveredObject(nullptr);
+}
+
+void mouseButtonCallback(GLFWwindow *window, int button,
+		int action, int mods)
+{
+	switch (button)
+	{
+	case GLFW_MOUSE_BUTTON_LEFT:
+		if (action == GLFW_PRESS && !ImGui::IsAnyWindowHovered())
+			Editor::setSelectedObject(Editor::getHoveredObject());
+		break;
+	}
 }
 
 void keyCallback(GLFWwindow *window, int key, int scancode,

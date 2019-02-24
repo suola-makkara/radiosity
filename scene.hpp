@@ -27,7 +27,7 @@ public:
 
 	static void addObject(const Plane &plane);
 
-	static void removeObject(std::list<Plane>::iterator &it);
+	static void removeObject(Plane *plane);
 
 	static void destruct();
 private:

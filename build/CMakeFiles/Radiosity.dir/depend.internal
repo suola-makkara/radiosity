@@ -387,6 +387,8 @@ CMakeFiles/Radiosity.dir/editor.cpp.o
  /home/roope/programs/c++/radiosity/plane.hpp
  /home/roope/programs/c++/radiosity/ray.hpp
  /home/roope/programs/c++/radiosity/render_engine.hpp
+ /home/roope/programs/c++/radiosity/scene.hpp
+ /home/roope/programs/c++/radiosity/settings.hpp
  /home/roope/programs/c++/radiosity/shader.hpp
 CMakeFiles/Radiosity.dir/gui.cpp.o
 CMakeFiles/Radiosity.dir/imgui/imgui.cpp.o
@@ -640,6 +642,7 @@ CMakeFiles/Radiosity.dir/plane.cpp.o
  /home/roope/programs/c++/radiosity/plane.cpp
  /home/roope/programs/c++/radiosity/plane.hpp
  /home/roope/programs/c++/radiosity/ray.hpp
+ /home/roope/programs/c++/radiosity/settings.hpp
  /home/roope/programs/c++/radiosity/shader.hpp
 CMakeFiles/Radiosity.dir/render_engine.cpp.o
  ..//imgui/imgui.h
@@ -851,6 +854,7 @@ CMakeFiles/Radiosity.dir/render_engine.cpp.o
  ../glm/glm/vector_relational.hpp
  ../imgui/imconfig.h
  /home/roope/programs/c++/radiosity/camera.hpp
+ /home/roope/programs/c++/radiosity/editor.hpp
  /home/roope/programs/c++/radiosity/gui.hpp
  /home/roope/programs/c++/radiosity/plane.hpp
  /home/roope/programs/c++/radiosity/ray.hpp
@@ -1068,6 +1072,7 @@ CMakeFiles/Radiosity.dir/scene.cpp.o
  ../glm/glm/vec3.hpp
  ../glm/glm/vec4.hpp
  ../glm/glm/vector_relational.hpp
+ /home/roope/programs/c++/radiosity/editor.hpp
  /home/roope/programs/c++/radiosity/plane.hpp
  /home/roope/programs/c++/radiosity/ray.hpp
  /home/roope/programs/c++/radiosity/scene.cpp

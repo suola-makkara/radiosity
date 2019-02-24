@@ -39,6 +39,8 @@ public:
 
 	void disable(GLFWwindow *window);
 	void enable(GLFWwindow *window);
+
+	bool isEnabled() const { return enabled; }
 };
 
 #endif // CAMERA

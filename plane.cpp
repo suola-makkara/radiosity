@@ -3,8 +3,10 @@
 
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 
 #include "plane.hpp"
+#include "settings.hpp"
 
 Plane::Plane(const Plane &plane)
 	: Plane(plane.position, plane.rotation, plane.size,
@@ -30,7 +32,26 @@ Plane::~Plane()
 bool Plane::intersectsRay(const Ray &ray,
 		float &u, float &v, float &t) const
 {
-	// TODO Implement
+	glm::vec3 pvec = glm::cross(ray.direction, vVec);
+
+	float det = glm::dot(pvec, uVec);
+	if (det < Settings::epsilon) return false;
+
+	float invdet = 1.0f / det;
+
+	glm::vec3 origin = position - 0.5f * uVec - 0.5f * vVec;
+	glm::vec3 tvec = ray.origin - origin;
+
+	u = invdet * glm::dot(pvec, tvec);
+	if (u < 0.0f || u >= 1.0f) return false;
+
+	glm::vec3 qvec = glm::cross(tvec, uVec);
+
+	v = invdet * glm::dot(qvec, ray.direction);
+	if (v < 0.0f || v >= 1.0f) return false;
+
+	t = invdet * glm::dot(qvec, vVec);
+	return t >= 0.0f;
 	return false;
 }
 
@@ -125,203 +146,7 @@ void Plane::setEmission(const glm::vec3 &emission) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 /*
-// TODO documentation
-
-Plane::Plane() : origin(0.5f, 0.5f, 0.0f),
-	edge1(1.0f, 0.0f, 0.0f), edge2(0.0f, 1.0f, 0.0f),
-	material{ 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f } { }
-
-Plane::Plane(const glm::vec3 &origin, const glm::vec3 &rotation,
-		const glm::vec2 &size, const Material &material)
-	: material(material)
-{
-	glm::mat4 r(1);
-	r = glm::rotate(r, rotation.x, glm::vec3(0.0f, 1.0f, 0.0f));
-	r = glm::rotate(r, rotation.y, glm::vec3(0.0f, 0.0f, 1.0f));
-	r = glm::rotate(r, rotation.z, glm::vec3(1.0f, 0.0f, 0.0f));
-
-	edge1 = glm::mat3(r) * (size.x * glm::vec3(1.0f, 0.0f, 0.0f));
-	edge2 = glm::mat3(r) * (size.y * glm::vec3(0.0f, 1.0f, 0.0f));
-
-	this->origin = origin - 0.5f * (edge1 + edge2);
-
-	std::lock_guard<std::mutex> lock(RenderSettings::access);
-
-	width = std::max(std::min(RenderSettings::subdivisionLevel,
-				(int)std::floor(glm::length(edge1) /
-					RenderSettings::minSubdivisionSize)), 1);
-	
-	height = std::max(std::min(RenderSettings::subdivisionLevel,
-				(int)std::floor(glm::length(edge2) /
-					RenderSettings::minSubdivisionSize)), 1);
-
-	generateDrawData();
-}
-
-Plane::~Plane()
-{
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
-}
-
-void Plane::generateDrawData()
-{
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, );
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, );
-
-	glVertexAttribPointer(0, );
-	glEnableVertexAttribArray(0);
-
-	glBindVertexArray(0);
-}
-
-void Plane::render(GLFWwindow &window, ShaderProgram &shaderProgram)
-{
-	shaderProgram.use();
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, getElements() * 6, GL_UNSIGNED_INT, 0);
-}
-
-bool Plane::intersectsRay(const Ray &ray,
-		float &u, float &v, float &t) const
-{
-	// TODO create epsilon based on editor grid size and replace hardcoded values
-
-	glm::vec3 pvec = glm::cross(ray.direction, edge2);
-
-	float det = glm::dot(pvec, edge1);
-	if (det < 0.001f) return false;
-
-	float invdet = 1.0f / det;
-
-	glm::Vec3 tvec = ray.origin - origin;
-
-	u = incdet * glm::dot(pvec, tvec);
-	if (u < 0.0f || u >= 1.0f) return false;
-
-	glm::vec3 qvec = glm::cross(tvec, edge1);
-
-	v = invdet * glm::dot(qvec, ray.direction);
-	if (v < 0.0f || v >= 1.0f) return false;
-
-	t = invdet * glm::dot(qvec, edge2);
-	return t >= 0.0f;
-}
-
-unsigned int Plane::getWidth() const { return width; }
-unsigned int Plane::getHeight() const { return height; }
-
-unsigned int Plane::getElementCount() const
-{
-	return width * height;
-}
-
-unsigned int Plane::getElementID(float u, float v) const
-{
-	return std::floor(u * width) + std::floor(v * height) * width;
-}
-
-glm::vec3 Plane::getPosition(float u, float v) const
-{
-	return edge1 * u + edge2 * v;
-}
-
-glm::vec3 Plane::getElementNodePosition(
-		unsigned int elementID) const
-{
-	float d1 = edge1 / (width * 2.0f);
-	float d2 = edge2 / (height * 2.0f);
-
-	return d1 * ((elementID % width) * 2.0f + 1.0f) +
-		d2 * (elementID / width * 2.0f + 1.0f);
-}
-
-std::vector<glm::vec2> Plane::getTriangleStripUV() const
-{
-	float du = 1.0f / width;
-	float dv = 1.0f / height;
-
-	std::vector<glm::vec2> triangleStrip;
-	triangleStrip.reserve(height * (width * 2 + 2));
-
-	for (int y = 0; y < hiehgt; y++)
-	{
-		if (y % 2) for (int x = width - 1; x >= 0; x--)
-		{
-			if (x == width - 1)
-			{
-				triangleStrip.push_back({ (x + 1) * du, y * dv });
-				triangleStrip.push_back({ (x + 1) * du, (y + 1) * dv });
-			}
-
-			triangleStrip.push_back({ x * du, y * dv });
-			triangleStrip.push_back({ x * du, (y + 1) * dv });
-		}
-		else for (int x = 0; x < width; x++)
-		{
-			if (x == 0)
-			{
-				triangleStrip.push_back({ x * du, (y + 1) * dv });
-				triangleStrip.push_back({ x * du, y * dv });
-			}
-			
-			triangleStrip.push_back({ (x + 1) * du, y * dv });
-			triangleStrip.push_back({ (x + 1) * du, (y + 1) * dv });
-		}
-	}
-
-	return triangleStrip;
-}
-
-const Material& Plane::getMaterial() const { return material; }
-
-RadiosityPlane::RadiosityPlane(
-		const Plane &plane, glm::vec3 *radiosities)
-	: Plane(plane)
-{
-	this->radiosities = new glm::vec3[getElementCount()];
-	for (int i = 0; i < getElementCount(); i++)
-		this->radiosities[i] = radiosities[i];
-
-	generateDrawData();
-}
-
-RadiosityPlane::~RadiosityPlane()
-{
-	if (radiosities != nullptr) delete[] radiosities;
-}
-
-RadiosityPlane::generateDrawData()
-{
-}
-
-RadiosityPlane::render(GLFWwindow &window, ShaderProgram &shaderProgram)
-{
-}
-
 glm::vec3 RadiosityPlane::getRadiosity(float u, float v) const
 {
 	unsigned int interpolationFunction;

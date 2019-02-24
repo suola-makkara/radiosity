@@ -139,7 +139,7 @@ void GUI::editor()
 			if (ImGui::DragFloat3("Position", &position.x, 0.1f))
 				selectedObject->setPosition(position);
 			if (ImGui::DragFloat3("Rotation", &rotation.x,
-						1.0f, 0.0f, 360.0f))
+						1.0f, -360.0f, 360.0f))
 				selectedObject->setRotation(rotation);
 			if (ImGui::DragFloat2("Size", &size.x, 0.5f, 0.0f, FLT_MAX))
 				selectedObject->setSize(size);
@@ -158,7 +158,17 @@ void GUI::editor()
 		}
 
 		ImGui::Spacing();
-		ImGui::Button("Remove");
+
+		if (ImGui::Button("Copy"))
+			Scene::addObject(*selectedObject);
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Remove"))
+		{
+			Editor::reset();
+			Scene::removeObject(selectedObject);
+		}
 	}
 
 	ImGui::End();
@@ -224,7 +234,7 @@ void GUI::saveWindow()
 	if (ImGui::BeginPopupModal("Save As", NULL,
 				ImGuiWindowFlags_AlwaysAutoResize))
 	{
-		ImGui::Text("Save as:");
+		ImGui::Text("Save to ./scenes/ as:");
 		ImGui::SameLine();
 		static char buffer[64] = "";
 		ImGui::InputText("", buffer, 64);
@@ -266,20 +276,25 @@ void GUI::mainMenuBar()
 					if (file.path().extension() ==
 							path(".sc"))
 						if (ImGui::MenuItem(file.path()
-									.filename().c_str()))
-							Scene::load(file.path());
+									.filename().string().c_str()))
+							Scene::load(file.path().string());
+				}
+#else
+				ImGui::Text("Open from ./scenes/");
+				static char buffer[64] = "";
+				ImGui::InputText("", buffer, 64);
+				if (ImGui::Button("Open"))
+				{
+					Scene::load(buffer);
+					buffer[0] = '\0';
 				}
 #endif
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::MenuItem("Save"))
-			{
-				if (Scene::hasFileAddress())
-					Scene::save();
-				else
-					showSaveWindow = true;
-			}
+			if (ImGui::MenuItem("Save", NULL, false,
+						Scene::hasFileAddress()))
+				Scene::save();
 
 			if (ImGui::MenuItem("Save As"))
 				showSaveWindow = true;

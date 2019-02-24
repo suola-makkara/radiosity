@@ -386,6 +386,8 @@ CMakeFiles/Radiosity.dir/editor.cpp.o: ../editor.hpp
 CMakeFiles/Radiosity.dir/editor.cpp.o: ../plane.hpp
 CMakeFiles/Radiosity.dir/editor.cpp.o: ../ray.hpp
 CMakeFiles/Radiosity.dir/editor.cpp.o: ../render_engine.hpp
+CMakeFiles/Radiosity.dir/editor.cpp.o: ../scene.hpp
+CMakeFiles/Radiosity.dir/editor.cpp.o: ../settings.hpp
 CMakeFiles/Radiosity.dir/editor.cpp.o: ../shader.hpp
 
 
@@ -639,6 +641,7 @@ CMakeFiles/Radiosity.dir/plane.cpp.o: ../glm/glm/vector_relational.hpp
 CMakeFiles/Radiosity.dir/plane.cpp.o: ../plane.cpp
 CMakeFiles/Radiosity.dir/plane.cpp.o: ../plane.hpp
 CMakeFiles/Radiosity.dir/plane.cpp.o: ../ray.hpp
+CMakeFiles/Radiosity.dir/plane.cpp.o: ../settings.hpp
 CMakeFiles/Radiosity.dir/plane.cpp.o: ../shader.hpp
 
 CMakeFiles/Radiosity.dir/render_engine.cpp.o: ../imgui/imgui.h
@@ -850,6 +853,7 @@ CMakeFiles/Radiosity.dir/render_engine.cpp.o: ../glm/glm/vec4.hpp
 CMakeFiles/Radiosity.dir/render_engine.cpp.o: ../glm/glm/vector_relational.hpp
 CMakeFiles/Radiosity.dir/render_engine.cpp.o: ../imgui/imconfig.h
 CMakeFiles/Radiosity.dir/render_engine.cpp.o: ../camera.hpp
+CMakeFiles/Radiosity.dir/render_engine.cpp.o: ../editor.hpp
 CMakeFiles/Radiosity.dir/render_engine.cpp.o: ../gui.hpp
 CMakeFiles/Radiosity.dir/render_engine.cpp.o: ../plane.hpp
 CMakeFiles/Radiosity.dir/render_engine.cpp.o: ../ray.hpp
@@ -1067,6 +1071,7 @@ CMakeFiles/Radiosity.dir/scene.cpp.o: ../glm/glm/vec2.hpp
 CMakeFiles/Radiosity.dir/scene.cpp.o: ../glm/glm/vec3.hpp
 CMakeFiles/Radiosity.dir/scene.cpp.o: ../glm/glm/vec4.hpp
 CMakeFiles/Radiosity.dir/scene.cpp.o: ../glm/glm/vector_relational.hpp
+CMakeFiles/Radiosity.dir/scene.cpp.o: ../editor.hpp
 CMakeFiles/Radiosity.dir/scene.cpp.o: ../plane.hpp
 CMakeFiles/Radiosity.dir/scene.cpp.o: ../ray.hpp
 CMakeFiles/Radiosity.dir/scene.cpp.o: ../scene.cpp

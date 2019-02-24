@@ -14,7 +14,10 @@ public:
 	static void updateCamera(GLFWwindow *window);
 	static void toggleCamera(GLFWwindow *window);
 
+	static glm::vec3 getCameraPosition();
 	static glm::mat4 getViewMatrix();
+
+	static bool isCameraEnabled();
 
 	// static void calculateRadiosity();
 	// static Progress getRadiosityProgress();

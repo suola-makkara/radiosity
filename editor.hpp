@@ -6,9 +6,12 @@
 class Editor
 {
 public:
-	static void findHoveredObject();
+	static void findHoveredObject(GLFWwindow *window);
+	
+	static void reset();
 
 	static Plane* getHoveredObject();
+	static void setHoveredObject(Plane *object);
 
 	static Plane* getSelectedObject();
 	static void setSelectedObject(Plane *object);
