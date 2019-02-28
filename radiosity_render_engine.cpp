@@ -29,6 +29,7 @@ void RadiosityRenderEngine::initialize()
 
 void RadiosityRenderEngine::destruct()
 {
+	radiosityVector.clear();
 	objects.clear();
 }
 
@@ -68,7 +69,6 @@ void RadiosityRenderEngine::stop()
 {
 	std::lock_guard<std::mutex> lock(access);
 	
-	threadRunning = false;
 	shouldStop = true;
 }
 
@@ -76,6 +76,18 @@ bool RadiosityRenderEngine::isFinished()
 {
 	std::lock_guard<std::mutex> lock(access);
 	return finished;
+}
+
+bool RadiosityRenderEngine::isRunning()
+{
+	std::lock_guard<std::mutex> lock(access);
+	return threadRunning;
+}
+
+bool RadiosityRenderEngine::isWaiting()
+{
+	std::lock_guard<std::mutex> lock(access);
+	return threadRunning && shouldStop;
 }
 
 std::vector<RadiosityPlane> RadiosityRenderEngine::objects =
@@ -187,6 +199,7 @@ void RadiosityRenderEngine::calculateInternal()
 				{
 					delete[] elementIndexing;
 					deleteMatrix(formFactorMatrix, elementCount);
+					threadRunning = false;
 					return;
 				}
 			}
@@ -207,11 +220,11 @@ void RadiosityRenderEngine::calculateInternal()
 		for (int j = 0; j < objects[i].getElementCount(); j++)
 		{
 			emissionVector[0][elementIndexing[i] + j]
-				= objects[i].getEmission().x * 3.0f;
+				= objects[i].getEmission().x * 10.0f;
 			emissionVector[1][elementIndexing[i] + j]
-				= objects[i].getEmission().y * 3.0f;
+				= objects[i].getEmission().y * 10.0f;
 			emissionVector[2][elementIndexing[i] + j]
-				= objects[i].getEmission().z * 3.0f;
+				= objects[i].getEmission().z * 10.0f;
 		}
 
 	switch (matrixAlgorithm)
@@ -255,6 +268,7 @@ void RadiosityRenderEngine::calculateInternal()
 				delete[] emissionVector[i];
 				delete[] radiosityVector[i];
 			}
+			threadRunning = false;
 			return;
 		}
 		}
@@ -276,7 +290,11 @@ void RadiosityRenderEngine::calculateInternal()
 	}
 
 	std::lock_guard<std::mutex> lock(access);
-	if (shouldStop) return;
+	if (shouldStop)
+	{
+		threadRunning = false;
+		return;
+	}
 
 	threadRunning = false;
 	finished = true;

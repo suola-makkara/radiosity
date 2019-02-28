@@ -1,0 +1,7 @@
+build/imgui.ini
+build/Radiosity
+build/glfw/
+build/cmake_install.cmake
+build/Makefile
+build/CMakeFiles/
+build/CMakeCache.txt

@@ -97,7 +97,7 @@ void GUI::renderSettings()
 	if (!showRenderSettings) return;
 	
 	ImGui::SetNextWindowPos({ 10.0f, 40.0f }, ImGuiCond_Appearing);
-	ImGui::SetNextWindowSize({ 320.0f, 160.0f }, ImGuiCond_Appearing);
+	ImGui::SetNextWindowSize({ 320.0f, 280.0f }, ImGuiCond_Appearing);
 
 	ImGui::Begin("Render Settings", &showRenderSettings,
 			enabled ? 0 : ImGuiWindowFlags_NoInputs);
@@ -155,12 +155,35 @@ void GUI::renderSettings()
 
 		ImGui::Spacing();
 	}
-
-	if (ImGui::Button("Render"))
+	
+	if (ImGui::CollapsingHeader("Shading"))
 	{
-		RadiosityRenderEngine::initialize();
-		RadiosityRenderEngine::calculate();
-		Settings::mode = Settings::RENDER;
+		const char *shaders[] { "Cell", "Gouraud" };
+		static int i = (int)RenderSettings::shading;
+		if (ImGui::Combo("Shaders", &i, shaders, IM_ARRAYSIZE(shaders)))
+			RenderSettings::shading = (RenderSettings::Shading)i;
+
+		ImGui::Spacing();
+	}
+
+	if (RadiosityRenderEngine::isWaiting())
+		ImGui::Text("Waiting for thread to close!");
+	else if (RadiosityRenderEngine::isRunning())
+	{
+		if (ImGui::Button("Terminate"))
+		{
+			RadiosityRenderEngine::stop();
+			Settings::mode = Settings::EDIT;
+		}
+	}
+	else 
+	{
+		if (ImGui::Button("Render"))
+		{
+			RadiosityRenderEngine::initialize();
+			RadiosityRenderEngine::calculate();
+			Settings::mode = Settings::RENDER;
+		}
 	}
 
 	ImGui::End();
@@ -169,6 +192,12 @@ void GUI::renderSettings()
 void GUI::editor()
 {
 	if (!showEditor) return;
+
+	if (Settings::mode == Settings::RENDER)
+	{
+		showEditor = false;
+		return;
+	}
 
 	ImGui::SetNextWindowPos({ (float)Settings::windowWidth - 290.0f,
 			40.0f }, ImGuiCond_Appearing);
@@ -241,11 +270,10 @@ void GUI::editor()
 	ImGui::End();
 }
 
+// TODO
 void GUI::renderingProgress()
 {
 	if (!showRenderingProgress) return;
-
-	// TODO Implement progress bar & querrying progress
 
 	ImGui::Begin("Rendering Progress", &showRenderingProgress,
 			enabled ? 0 : ImGuiWindowFlags_NoInputs);
@@ -253,11 +281,10 @@ void GUI::renderingProgress()
 	ImGui::End();
 }
 
+// TODO
 void GUI::helpWindow()
 {
 	if (!showHelpWindow) return;
-
-	// TODO Write help text
 
 	ImGui::Begin("Help", &showHelpWindow,
 			enabled ? 0 : ImGuiWindowFlags_NoInputs);
@@ -338,7 +365,10 @@ void GUI::mainMenuBar()
 		if (ImGui::BeginMenu(Scene::isSaved() ? "File" : "File+", enabled))
 		{
 			if (ImGui::MenuItem("New"))
+			{
 				Scene::loadNew();
+				Settings::mode = Settings::EDIT;
+			}
 
 			if (ImGui::BeginMenu("Open"))
 			{
@@ -350,7 +380,10 @@ void GUI::mainMenuBar()
 							path(".sc"))
 						if (ImGui::MenuItem(file.path()
 									.filename().string().c_str()))
+						{
 							Scene::load(file.path().string());
+							Settings::mode = Settings::EDIT;
+						}
 				}
 #else
 				ImGui::Text("Open from ./scenes/");
@@ -360,6 +393,7 @@ void GUI::mainMenuBar()
 				{
 					Scene::load(buffer);
 					buffer[0] = '\0';
+					Settings::mode = Settings::EDIT;
 				}
 #endif
 				ImGui::EndMenu();
@@ -385,11 +419,10 @@ void GUI::mainMenuBar()
 			if (ImGui::MenuItem("Editor", NULL, false,
 					Settings::mode == Settings::EDIT))
 				showEditor = true;
-			if (ImGui::MenuItem("Render Settings", NULL, false,
-					Settings::mode == Settings::EDIT))
+			if (ImGui::MenuItem("Render Settings"))
 				showRenderSettings = true;
-			if (ImGui::MenuItem("Rendering Progress"))
-				showRenderingProgress = true;
+			/*if (ImGui::MenuItem("Rendering Progress"))
+				showRenderingProgress = true;*/ // TODO
 			ImGui::EndMenu();
 		}
 

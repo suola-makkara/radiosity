@@ -21,6 +21,14 @@ struct RenderSettings
 	};
 
 	static MatrixAlgorithm matrixAlgorithm;
+
+	enum Shading
+	{
+		CELL,
+		GOURAUD
+	};
+
+	static Shading shading;
 };
 
 #endif // RENDER_SETTINGS_HPP

@@ -18,7 +18,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 endif()
 
 set(SRC
-	main_temp.cpp
+	main.cpp
 	gui.cpp
 	scene.cpp
 	plane.cpp

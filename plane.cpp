@@ -296,10 +296,48 @@ void RadiosityPlane::generateMesh(glm::vec3 *radiosityVector)
 			setVec3(&vertices[(x + y * meshWidth) * 36 + 24], &v3.x);
 			setVec3(&vertices[(x + y * meshWidth) * 36 + 30], &v2.x);
 
-			glm::vec3 temp(1.0f);
-			for (int i = 0; i < 6; i++)
-				setVec3(&vertices[(x + y * meshWidth) * 36 + 3 + 6 * i],
-						&radiosityVector[(x + y * meshWidth)].x);
+			switch (RenderSettings::shading)
+			{
+			case RenderSettings::CELL:
+				for (int i = 0; i < 6; i++)
+					setVec3(&vertices
+							[(x + y * meshWidth) * 36 + 3 + 6 * i],
+							&radiosityVector[(x + y * meshWidth)].x);
+				break;
+			case RenderSettings::GOURAUD:
+				{
+				glm::vec3 v[4];
+
+				for (int i = 0; i < 4; i++)
+				{
+					int xx = i % 2 == 0 ? x : x + 1;
+					int yy = i / 2 == 0 ? y : y + 1;
+
+					unsigned int xmin = xx - 1 < 0 ? 0 : xx - 1;
+					unsigned int xmax = xx >= meshWidth ?
+						meshWidth - 1 : xx;
+					unsigned int ymin = yy - 1 < 0 ? 0 : yy - 1;
+					unsigned int ymax = yy >= meshHeight ?
+						meshHeight - 1 : yy;
+					
+					glm::vec3 avg(0.0f);
+					avg += radiosityVector[(xmax + ymax * meshWidth)];
+					avg += radiosityVector[(xmax + ymin * meshWidth)];
+					avg += radiosityVector[(xmin + ymin * meshWidth)];
+					avg += radiosityVector[(xmin + ymax * meshWidth)];
+
+					v[i] = avg / 4.0f;
+				}
+
+				setVec3(&vertices[(x + y * meshWidth) * 36 + 3], &v[0].x);
+				setVec3(&vertices[(x + y * meshWidth) * 36 + 9], &v[1].x);
+				setVec3(&vertices[(x + y * meshWidth) * 36 + 15], &v[2].x);
+				setVec3(&vertices[(x + y * meshWidth) * 36 + 21], &v[1].x);
+				setVec3(&vertices[(x + y * meshWidth) * 36 + 27], &v[3].x);
+				setVec3(&vertices[(x + y * meshWidth) * 36 + 33], &v[2].x);
+				break;
+				}
+			}
 		}
 
 	glBindVertexArray(VAO);

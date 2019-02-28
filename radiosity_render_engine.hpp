@@ -18,6 +18,8 @@ public:
 	static void render(ShaderProgram &shaderProgram);
 	static void stop();
 	static bool isFinished();
+	static bool isRunning();
+	static bool isWaiting();
 
 	friend void LUDecompose(float **a, float **l, float **u,
 			unsigned int n);
