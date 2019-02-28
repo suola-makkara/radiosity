@@ -1,3 +1,6 @@
+#include "matrix_operations.hpp"
+#include "radiosity_render_engine.hpp"
+
 float** genMatrix(unsigned int n)
 {
 	float **a = new float*[n];
@@ -6,7 +9,7 @@ float** genMatrix(unsigned int n)
 	return a;
 }
 
-void delMatrix(float** a, unsigned int n)
+void deleteMatrix(float** a, unsigned int n)
 {
 	for (int i = 0; i < n; i++)
 		delete[] a[i];
@@ -41,11 +44,14 @@ void LUDecompose(float **a, float **l, float **u, unsigned int n)
 				u[i][y] += elimination * u[i][x];
 
 			l[x][y] = -elimination;
+			
+			std::lock_guard<std::mutex>
+				lock(RadiosityRenderEngine::access);
+			if (RadiosityRenderEngine::shouldStop) return;
 		}
 }
 
-void LUSolve(float *x, float *y, float **l, float **u,
-		unsigned int n)
+void LUSolve(float *x, float *y, float **l, float **u, unsigned int n)
 {
 	float *z = new float[n];
 
@@ -56,6 +62,10 @@ void LUSolve(float *x, float *y, float **l, float **u,
 			z[i] -= l[j][i] * z[j];
 
 		z[i] /= l[i][i];
+		
+		std::lock_guard<std::mutex>
+			lock(RadiosityRenderEngine::access);
+		if (RadiosityRenderEngine::shouldStop) return;
 	}
 
 	for (int i = n - 1; i >= 0; i--)
@@ -65,6 +75,10 @@ void LUSolve(float *x, float *y, float **l, float **u,
 			x[i] -= u[j][i] * x[j];
 
 		x[i] /= u[i][i];
+		
+		std::lock_guard<std::mutex>
+			lock(RadiosityRenderEngine::access);
+		if (RadiosityRenderEngine::shouldStop) return;
 	}
 
 	delete[] z;

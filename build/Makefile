@@ -492,6 +492,33 @@ main_temp.cpp.s:
 	$(MAKE) -f CMakeFiles/Radiosity.dir/build.make CMakeFiles/Radiosity.dir/main_temp.cpp.s
 .PHONY : main_temp.cpp.s
 
+matrix_operations.o: matrix_operations.cpp.o
+
+.PHONY : matrix_operations.o
+
+# target to build an object file
+matrix_operations.cpp.o:
+	$(MAKE) -f CMakeFiles/Radiosity.dir/build.make CMakeFiles/Radiosity.dir/matrix_operations.cpp.o
+.PHONY : matrix_operations.cpp.o
+
+matrix_operations.i: matrix_operations.cpp.i
+
+.PHONY : matrix_operations.i
+
+# target to preprocess a source file
+matrix_operations.cpp.i:
+	$(MAKE) -f CMakeFiles/Radiosity.dir/build.make CMakeFiles/Radiosity.dir/matrix_operations.cpp.i
+.PHONY : matrix_operations.cpp.i
+
+matrix_operations.s: matrix_operations.cpp.s
+
+.PHONY : matrix_operations.s
+
+# target to generate assembly for a file
+matrix_operations.cpp.s:
+	$(MAKE) -f CMakeFiles/Radiosity.dir/build.make CMakeFiles/Radiosity.dir/matrix_operations.cpp.s
+.PHONY : matrix_operations.cpp.s
+
 plane.o: plane.cpp.o
 
 .PHONY : plane.o
@@ -519,6 +546,33 @@ plane.cpp.s:
 	$(MAKE) -f CMakeFiles/Radiosity.dir/build.make CMakeFiles/Radiosity.dir/plane.cpp.s
 .PHONY : plane.cpp.s
 
+radiosity_render_engine.o: radiosity_render_engine.cpp.o
+
+.PHONY : radiosity_render_engine.o
+
+# target to build an object file
+radiosity_render_engine.cpp.o:
+	$(MAKE) -f CMakeFiles/Radiosity.dir/build.make CMakeFiles/Radiosity.dir/radiosity_render_engine.cpp.o
+.PHONY : radiosity_render_engine.cpp.o
+
+radiosity_render_engine.i: radiosity_render_engine.cpp.i
+
+.PHONY : radiosity_render_engine.i
+
+# target to preprocess a source file
+radiosity_render_engine.cpp.i:
+	$(MAKE) -f CMakeFiles/Radiosity.dir/build.make CMakeFiles/Radiosity.dir/radiosity_render_engine.cpp.i
+.PHONY : radiosity_render_engine.cpp.i
+
+radiosity_render_engine.s: radiosity_render_engine.cpp.s
+
+.PHONY : radiosity_render_engine.s
+
+# target to generate assembly for a file
+radiosity_render_engine.cpp.s:
+	$(MAKE) -f CMakeFiles/Radiosity.dir/build.make CMakeFiles/Radiosity.dir/radiosity_render_engine.cpp.s
+.PHONY : radiosity_render_engine.cpp.s
+
 render_engine.o: render_engine.cpp.o
 
 .PHONY : render_engine.o
@@ -545,6 +599,33 @@ render_engine.s: render_engine.cpp.s
 render_engine.cpp.s:
 	$(MAKE) -f CMakeFiles/Radiosity.dir/build.make CMakeFiles/Radiosity.dir/render_engine.cpp.s
 .PHONY : render_engine.cpp.s
+
+render_settings.o: render_settings.cpp.o
+
+.PHONY : render_settings.o
+
+# target to build an object file
+render_settings.cpp.o:
+	$(MAKE) -f CMakeFiles/Radiosity.dir/build.make CMakeFiles/Radiosity.dir/render_settings.cpp.o
+.PHONY : render_settings.cpp.o
+
+render_settings.i: render_settings.cpp.i
+
+.PHONY : render_settings.i
+
+# target to preprocess a source file
+render_settings.cpp.i:
+	$(MAKE) -f CMakeFiles/Radiosity.dir/build.make CMakeFiles/Radiosity.dir/render_settings.cpp.i
+.PHONY : render_settings.cpp.i
+
+render_settings.s: render_settings.cpp.s
+
+.PHONY : render_settings.s
+
+# target to generate assembly for a file
+render_settings.cpp.s:
+	$(MAKE) -f CMakeFiles/Radiosity.dir/build.make CMakeFiles/Radiosity.dir/render_settings.cpp.s
+.PHONY : render_settings.cpp.s
 
 scene.o: scene.cpp.o
 
@@ -675,12 +756,21 @@ help:
 	@echo "... main_temp.o"
 	@echo "... main_temp.i"
 	@echo "... main_temp.s"
+	@echo "... matrix_operations.o"
+	@echo "... matrix_operations.i"
+	@echo "... matrix_operations.s"
 	@echo "... plane.o"
 	@echo "... plane.i"
 	@echo "... plane.s"
+	@echo "... radiosity_render_engine.o"
+	@echo "... radiosity_render_engine.i"
+	@echo "... radiosity_render_engine.s"
 	@echo "... render_engine.o"
 	@echo "... render_engine.i"
 	@echo "... render_engine.s"
+	@echo "... render_settings.o"
+	@echo "... render_settings.i"
+	@echo "... render_settings.s"
 	@echo "... scene.o"
 	@echo "... scene.i"
 	@echo "... scene.s"

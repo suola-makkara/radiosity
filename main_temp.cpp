@@ -9,6 +9,7 @@
 #include "scene.hpp"
 #include "settings.hpp"
 #include "editor.hpp"
+#include "radiosity_render_engine.hpp"
 
 void windowCloseCallback(GLFWwindow *window);
 void windowSizeCallback(GLFWwindow *window, int widht, int height);
@@ -27,8 +28,11 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow *window = glfwCreateWindow(1200, 800, "Radiosity",
-			NULL, NULL);
+	GLFWwindow *window = glfwCreateWindow(Settings::windowWidth,
+			Settings::windowHeight, "Radiosity", NULL, NULL);
+
+	glfwSetWindowSizeLimits(window, Settings::minWindowWidth,
+			Settings::minWindowHeight, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
 	glfwSetWindowCloseCallback(window, windowCloseCallback);
 	glfwSetWindowSizeCallback(window, windowSizeCallback);
@@ -42,7 +46,7 @@ int main()
 
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
-	glViewport(0, 0, 1200, 800);
+	glViewport(0, 0, Settings::windowWidth, Settings::windowHeight);
 
 	RenderEngine::initialize(window);
 	GUI::initialize(window);
@@ -56,10 +60,17 @@ int main()
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |
 				GL_STENCIL_BUFFER_BIT);
+		
+		if (!RenderEngine::isCameraEnabled() && !GUI::isActive())
+			Editor::findHoveredObject(window);
+		else
+			Editor::setHoveredObject(nullptr);
 
 		RenderEngine::updateCamera(window);
 
 		GUI::update(window);
+
+		// ImGui::ShowDemoWindow(NULL);
 
 		RenderEngine::render();
 
@@ -68,6 +79,7 @@ int main()
     
 	GUI::destruct();
 	Scene::destruct();
+	RadiosityRenderEngine::destruct();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
@@ -87,15 +99,8 @@ void windowSizeCallback(GLFWwindow *window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-void cursorPositionCallback(GLFWwindow *window, double posX, double posY)
-{
-	if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) &&
-			!ImGui::IsAnyItemActive() &&
-			!RenderEngine::isCameraEnabled())
-		Editor::findHoveredObject(window);
-	else
-		Editor::setHoveredObject(nullptr);
-}
+void cursorPositionCallback(GLFWwindow *window,
+		double posX, double posY) { }
 
 void mouseButtonCallback(GLFWwindow *window, int button,
 		int action, int mods)
@@ -103,8 +108,12 @@ void mouseButtonCallback(GLFWwindow *window, int button,
 	switch (button)
 	{
 	case GLFW_MOUSE_BUTTON_LEFT:
-		if (action == GLFW_PRESS && !ImGui::IsAnyWindowHovered())
+		if (action == GLFW_PRESS && !GUI::isActive())
+		{
 			Editor::setSelectedObject(Editor::getHoveredObject());
+			if (Editor::getHoveredObject() != nullptr)
+				GUI::openEditor();
+		}
 		break;
 	}
 }
@@ -116,7 +125,21 @@ void keyCallback(GLFWwindow *window, int key, int scancode,
 	{
 	case GLFW_KEY_G:
 		if (action == GLFW_RELEASE)
-			RenderEngine::toggleCamera(window);
+		{
+			if (RenderEngine::isCameraEnabled())
+				RenderEngine::disableCamera(window);
+			else if (!GUI::isPopupOpen())
+				RenderEngine::enableCamera(window);
+		}
+		break;
+	case GLFW_KEY_ESCAPE:
+		if (action == GLFW_RELEASE)
+		{
+			if (RenderEngine::isCameraEnabled())
+				RenderEngine::disableCamera(window);
+			else
+				Editor::setSelectedObject(nullptr);
+		}
 		break;
 	}
 }

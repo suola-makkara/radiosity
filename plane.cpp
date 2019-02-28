@@ -7,6 +7,7 @@
 
 #include "plane.hpp"
 #include "settings.hpp"
+#include "render_settings.hpp"
 
 Plane::Plane(const Plane &plane)
 	: Plane(plane.position, plane.rotation, plane.size,
@@ -64,6 +65,8 @@ void Plane::draw(ShaderProgram &shaderProgram) const
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
+void setVec3(float *dest, float *source);
+
 void Plane::updateMesh()
 {
 	glm::vec3 v0 = position - 0.5f * uVec - 0.5f * vVec;
@@ -76,8 +79,7 @@ void Plane::updateMesh()
 	float vertices[18];
 
 	for (int i = 0; i < 6; i++)
-		for (int j = 0; j < 3; j++)
-			vertices[3 * i + j] = verticesVec[i][j];
+		setVec3(&vertices[3 * i], &verticesVec[i].x);
 
 	glBindVertexArray(VAO);
 
@@ -141,61 +143,206 @@ void Plane::setEmission(const glm::vec3 &emission) {
 	this->emission = emission; }
 
 
+SubdividedPlane::SubdividedPlane(const SubdividedPlane &plane)
+	: SubdividedPlane(plane.getPosition(), plane.getRotation(),
+			plane.getSize(), plane.getColor(), plane.getEmission()) { }
 
-
-
-
-
-/*
-glm::vec3 RadiosityPlane::getRadiosity(float u, float v) const
+SubdividedPlane::SubdividedPlane(
+			const glm::vec3 &position, const glm::vec3 &rotation,
+			const glm::vec2 &size, const glm::vec3 &color,
+			const glm::vec3 &emission)
+	: Plane(position, rotation, size, color, emission)
 {
-	unsigned int interpolationFunction;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
 
+	updateMesh();
+}
+
+SubdividedPlane::~SubdividedPlane()
+{
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+}
+
+void SubdividedPlane::draw(ShaderProgram &shaderProgram) const
+{
+	shaderProgram.use();
+	shaderProgram.set3fv("color", glm::vec3(1.0f, 1.0f, 1.0f));
+
+	glBindVertexArray(VAO);
+
+	unsigned int lines = meshWidth + meshHeight + 2;
+	glDrawArrays(GL_LINES, 0, lines * 2);
+}
+
+void SubdividedPlane::updateMesh()
+{
+	Plane::updateMesh();
+
+	meshWidth = std::max(std::min(RenderSettings::subdivisionLevel,
+				(unsigned int)std::floor(size.x /
+					RenderSettings::maxSubdivisionSize)), 1u);
+	meshHeight = std::max(std::min(RenderSettings::subdivisionLevel,
+				(unsigned int)std::floor(size.y /
+					RenderSettings::maxSubdivisionSize)), 1u);
+
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	float vertices[(meshWidth + meshHeight + 2) * 6];
+
+	glm::vec3 origin = position - 0.5f * uVec - 0.5f * vVec;
+
+	float dx = 1.0f / meshWidth;
+	float dy = 1.0f / meshHeight;
+
+	for (int x = 0; x <= meshWidth; x++)
 	{
-		std::lock_guard<std::mutex> lock(RenderSettings::access);
-		interpolationFunction =
-			RenderSettings::radiosityValueInterpolationFunction;
+		glm::vec3 v0 = origin + x * dx * uVec;
+		glm::vec3 v1 = v0 + vVec;
+		setVec3(&vertices[x * 6], &v0.x);
+		setVec3(&vertices[x * 6 + 3], &v1.x);
 	}
 
-	// TODO Special case width or hiehgt = 1
+	for (int y = 0; y <= meshHeight; y++)
+	{
+		glm::vec3 v0 = origin + y * dy * vVec;
+		glm::vec3 v1 = v0 + uVec;
+		setVec3(&vertices[(meshWidth + 1 + y) * 6], &v0.x);
+		setVec3(&vertices[(meshWidth + 1 + y) * 6 + 3], &v1.x);
+	}
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices,
+			GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
+			(void*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindVertexArray(0);
+}
+
+void SubdividedPlane::setPosition(const glm::vec3 &position)
+{
+	Plane::setPosition(position);
+	updateMesh();
+}
+
+void SubdividedPlane::setRotation(const glm::vec3 &rotation)
+{
+	Plane::setRotation(rotation);
+	updateMesh();
+}
+
+void SubdividedPlane::setSize(const glm::vec2 &size)
+{
+	Plane::setSize(size);
+	updateMesh();
+}
+
+
+RadiosityPlane::RadiosityPlane(const RadiosityPlane &plane)
+	: RadiosityPlane((const SubdividedPlane)plane) { }
+
+RadiosityPlane::RadiosityPlane(const SubdividedPlane &plane)
+	: SubdividedPlane(plane)
+{
+	normal = glm::normalize(glm::cross(uVec, vVec));
+
+	meshGenerated = false;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+}
+
+RadiosityPlane::~RadiosityPlane()
+{
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+}
+
+void RadiosityPlane::draw(ShaderProgram &shaderProgram) const
+{
+	if (!meshGenerated) return;
+
+	shaderProgram.use();
+	glBindVertexArray(VAO);
 	
-	float vu = std::round(u * width);
-	float vv = std::round(v * height);
+	glDrawArrays(GL_TRIANGLES, 0, getElementCount() * 6);
+}
 
-	float u0 = vu - 0.5f;
-	float u1 = vu + 0.5f;
-	if (u0 < 0.0f) u0 = u1, u1 = vu + 1.5f;
-	else if (u1 > width) u1 = u0, u0 = vu - 1.5f;
+void RadiosityPlane::generateMesh(glm::vec3 *radiosityVector)
+{
+	glm::vec3 origin = position - 0.5f * uVec - 0.5f * vVec;
 
-	float v0 = vv - 0.5f;
-	float v1 = vv + 0.5f;
-	if (v0 < 0.0f) v0 = v1, v1 = vv + 1.5f;
-	else if (v1 > hieght) v1 = v0, v0 = vv - 1.5f;
+	float vertices[getElementCount() * 36];
 
-	x = u * width - u0;
-	y = v * height - v0;
-
-	u0 /= width, u1 /= width;
-	v0 /= height, v1 /= height;
-
-	glm::vec3 r0 = radiosities(u0, v0);
-	glm::vec3 r1 = radiosities(u1, v0);
-	glm::vec3 r2 = radiosities(u0, v1);
-	glm::vec3 r3 = radiosities(u1, v1);
-
-	switch (interpolationFunction)
-	{
-	case RenderSettings::LINEAR:
+	glm::vec3 dx = uVec / (float)meshWidth;
+	glm::vec3 dy = vVec / (float)meshHeight;
+	for (int x = 0; x < meshWidth; x++)
+		for (int y = 0; y < meshHeight; y++)
 		{
-			glm::vec3 r4 = (r0 - r1) * x + r0;
-			glm::vec3 r5 = (r2 - r3) * x + r2;
+			glm::vec3 v0 = origin + (float)x * dx + (float)y * dy;
+			glm::vec3 v1 = v0 + dx;
+			glm::vec3 v2 = v0 + dy;
+			glm::vec3 v3 = v1 + dy;
 
-			return (r4 - r5) * y + r4;
+			setVec3(&vertices[(x + y * meshWidth) * 36], &v0.x);
+			setVec3(&vertices[(x + y * meshWidth) * 36 + 6], &v1.x);
+			setVec3(&vertices[(x + y * meshWidth) * 36 + 12], &v2.x);
+			setVec3(&vertices[(x + y * meshWidth) * 36 + 18], &v1.x);
+			setVec3(&vertices[(x + y * meshWidth) * 36 + 24], &v3.x);
+			setVec3(&vertices[(x + y * meshWidth) * 36 + 30], &v2.x);
+
+			glm::vec3 temp(1.0f);
+			for (int i = 0; i < 6; i++)
+				setVec3(&vertices[(x + y * meshWidth) * 36 + 3 + 6 * i],
+						&radiosityVector[(x + y * meshWidth)].x);
 		}
-		break;
-	case RenderSettings::CUBIC:
-		// TODO implement cubic interpolation
-		return glm::vec3(0.0f);
-		break;
-	}
-}*/
+
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices,
+			GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
+			(void*)0);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
+			(void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glBindVertexArray(0);
+
+	meshGenerated = true;
+}
+
+unsigned int RadiosityPlane::getElementCount() const {
+	return meshWidth * meshHeight; }
+
+unsigned int RadiosityPlane::getElementId(float u, float v) const
+{
+	return std::floor(u * meshWidth) +
+		std::floor(v * meshHeight) * meshWidth;
+}
+
+glm::vec3 RadiosityPlane::getElementNodePosition(unsigned int id) const
+{
+	return position + uVec * ((0.5f + id % meshWidth) / meshWidth - 0.5f)
+		+ vVec * ((0.5f + id / meshWidth) / meshHeight - 0.5f);
+}
+
+glm::vec3 RadiosityPlane::getNormal() const { return normal; }
+
+glm::vec3 RadiosityPlane::getTangent() const {
+	return glm::normalize(uVec); }
+
+glm::vec3 RadiosityPlane::getBitangent() const {
+	return glm::normalize(vVec); }
+
+
+void setVec3(float *dest, float *source)
+{
+	for (int i = 0; i < 3; i++)
+		dest[i] = source[i];
+}

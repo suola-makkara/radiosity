@@ -23,11 +23,11 @@ public:
 
 	static void update();
 
-	static std::list<Plane>& getObjects();
+	static std::list<SubdividedPlane>& getObjects();
 
-	static void addObject(const Plane &plane);
+	static void addObject(const SubdividedPlane &plane);
 
-	static void removeObject(Plane *plane);
+	static void removeObject(SubdividedPlane *plane);
 
 	static void destruct();
 private:
@@ -35,7 +35,7 @@ private:
 	
 	static bool saved;
 
-	static std::list<Plane> objects;
+	static std::list<SubdividedPlane> objects;
 };
 
 #endif // SCENE_HPP

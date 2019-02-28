@@ -154,20 +154,6 @@ type_mat3x2.inl
 
 ../glm/glm/./detail/type_mat3x2.inl
 
-../glm/glm/./detail/type_mat3x3.hpp
-type_vec3.hpp
-../glm/glm/./detail/type_vec3.hpp
-limits
--
-cstddef
--
-type_mat3x3.inl
-../glm/glm/./detail/type_mat3x3.inl
-
-../glm/glm/./detail/type_mat3x3.inl
-../matrix.hpp
-../glm/glm/./matrix.hpp
-
 ../glm/glm/./detail/type_mat3x4.hpp
 type_vec3.hpp
 ../glm/glm/./detail/type_vec3.hpp
@@ -210,24 +196,6 @@ type_mat4x3.inl
 
 ../glm/glm/./detail/type_mat4x3.inl
 
-../glm/glm/./detail/type_mat4x4.hpp
-type_vec4.hpp
-../glm/glm/./detail/type_vec4.hpp
-limits
--
-cstddef
--
-type_mat4x4.inl
-../glm/glm/./detail/type_mat4x4.inl
-
-../glm/glm/./detail/type_mat4x4.inl
-../matrix.hpp
-../glm/glm/./matrix.hpp
-type_mat4x4_simd.inl
-../glm/glm/./detail/type_mat4x4_simd.inl
-
-../glm/glm/./detail/type_mat4x4_simd.inl
-
 ../glm/glm/./detail/type_vec2.hpp
 qualifier.hpp
 ../glm/glm/./detail/qualifier.hpp
@@ -239,30 +207,6 @@ cstddef
 -
 type_vec2.inl
 ../glm/glm/./detail/type_vec2.inl
-
-../glm/glm/./detail/type_vec3.hpp
-qualifier.hpp
-../glm/glm/./detail/qualifier.hpp
-_swizzle.hpp
-../glm/glm/./detail/_swizzle.hpp
-_swizzle_func.hpp
-../glm/glm/./detail/_swizzle_func.hpp
-cstddef
--
-type_vec3.inl
-../glm/glm/./detail/type_vec3.inl
-
-../glm/glm/./detail/type_vec4.hpp
-qualifier.hpp
-../glm/glm/./detail/qualifier.hpp
-_swizzle.hpp
-../glm/glm/./detail/_swizzle.hpp
-_swizzle_func.hpp
-../glm/glm/./detail/_swizzle_func.hpp
-cstddef
--
-type_vec4.inl
-../glm/glm/./detail/type_vec4.inl
 
 ../glm/glm/./ext/matrix_double2x2.hpp
 ../detail/type_mat2x2.hpp
@@ -1538,10 +1482,6 @@ detail/func_vector_relational.inl
 
 ../imgui/imconfig.h
 
-/home/roope/programs/c++/radiosity/camera.cpp
-camera.hpp
-/home/roope/programs/c++/radiosity/camera.hpp
-
 /home/roope/programs/c++/radiosity/camera.hpp
 glad/glad.h
 -
@@ -1551,20 +1491,6 @@ glm/glm.hpp
 -
 glm/gtc/matrix_transform.hpp
 -
-
-/home/roope/programs/c++/radiosity/editor.cpp
-cmath
--
-iostream
--
-editor.hpp
-/home/roope/programs/c++/radiosity/editor.hpp
-render_engine.hpp
-/home/roope/programs/c++/radiosity/render_engine.hpp
-settings.hpp
-/home/roope/programs/c++/radiosity/settings.hpp
-scene.hpp
-/home/roope/programs/c++/radiosity/scene.hpp
 
 /home/roope/programs/c++/radiosity/editor.hpp
 plane.hpp
@@ -1585,8 +1511,24 @@ imgui/imgui_impl_glfw.h
 /home/roope/programs/c++/radiosity/plane.hpp
 glm/glm.hpp
 -
+vector
+-
 ray.hpp
 /home/roope/programs/c++/radiosity/ray.hpp
+shader.hpp
+/home/roope/programs/c++/radiosity/shader.hpp
+
+/home/roope/programs/c++/radiosity/radiosity_render_engine.hpp
+vector
+-
+thread
+-
+mutex
+-
+plane.hpp
+/home/roope/programs/c++/radiosity/plane.hpp
+render_settings.hpp
+/home/roope/programs/c++/radiosity/render_settings.hpp
 shader.hpp
 /home/roope/programs/c++/radiosity/shader.hpp
 
@@ -1607,12 +1549,16 @@ settings.hpp
 /home/roope/programs/c++/radiosity/settings.hpp
 editor.hpp
 /home/roope/programs/c++/radiosity/editor.hpp
+radiosity_render_engine.hpp
+/home/roope/programs/c++/radiosity/radiosity_render_engine.hpp
 
 /home/roope/programs/c++/radiosity/render_engine.hpp
 shader.hpp
 /home/roope/programs/c++/radiosity/shader.hpp
 camera.hpp
 /home/roope/programs/c++/radiosity/camera.hpp
+
+/home/roope/programs/c++/radiosity/render_settings.hpp
 
 /home/roope/programs/c++/radiosity/scene.hpp
 list

@@ -24,7 +24,7 @@ void Editor::findHoveredObject(GLFWwindow *window)
 		glm::normalize(glm::vec3(xPos - 0.5f * Settings::windowWidth,
 					0.5f * Settings::windowHeight - yPos, -h));
 	
-	std::list<Plane>& objects = Scene::getObjects();
+	std::list<SubdividedPlane>& objects = Scene::getObjects();
 	
 	float u, v, t, minT = -1.0f;
 	for (auto it = objects.begin(); it != objects.end(); it++)
@@ -40,11 +40,16 @@ void Editor::findHoveredObject(GLFWwindow *window)
 
 void Editor::reset() { hoveredObject = nullptr, selectedObject = nullptr; }
 
-Plane* Editor::getHoveredObject() { return hoveredObject; }
-void Editor::setHoveredObject(Plane *object) { hoveredObject = object; };
+SubdividedPlane* Editor::getHoveredObject() { return hoveredObject; }
+void Editor::setHoveredObject(SubdividedPlane *object) {
+	hoveredObject = object; };
 
-Plane* Editor::getSelectedObject() { return selectedObject; }
-void Editor::setSelectedObject(Plane *object) { selectedObject = object; }
+SubdividedPlane* Editor::getSelectedObject() { return selectedObject; }
+void Editor::setSelectedObject(SubdividedPlane *object) {
+	selectedObject = object; }
 
-Plane* Editor::hoveredObject = nullptr;
-Plane* Editor::selectedObject = nullptr;
+bool Editor::viewSubdivisions = false;
+
+SubdividedPlane* Editor::hoveredObject = nullptr;
+SubdividedPlane* Editor::selectedObject = nullptr;
+

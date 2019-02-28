@@ -3,6 +3,8 @@
 
 #include <glm/glm.hpp>
 
+#include <vector>
+
 #include "ray.hpp"
 #include "shader.hpp"
 
@@ -56,27 +58,61 @@ private:
 	unsigned int VBO;
 };
 
-/*
 class SubdividedPlane : public Plane
 {
 public:
-	SubdividedPlane(const Plane &plane);
+	SubdividedPlane(const SubdividedPlane &plane);
+	SubdividedPlane(
+			const glm::vec3 &position = glm::vec3(0.0f),
+			const glm::vec3 &rotation = glm::vec3(0.0f),
+			const glm::vec2 &size = glm::vec2(1.0f),
+			const glm::vec3 &color = glm::vec3(1.0f),
+			const glm::vec3 &emission = glm::vec3(0.0f));
 
 	~SubdividedPlane();
 
-	void draw(GLFWwindow *window,
-			ShaderProgram &shaderProgram) override const;
-
-	void setPosition(const glm::vec3 &position) override;
-	void setRotation(const glm::vec3 &rotation) override;
-	void setSize(const glm::vec2 &size) override;
+	void draw(ShaderProgram &shaderProgram) const;
+	
+	void updateMesh();
+	
+	void setPosition(const glm::vec3 &position);
+	void setRotation(const glm::vec3 &rotation);
+	void setSize(const glm::vec2 &size);
 protected:
+	unsigned int meshWidth;
+	unsigned int meshHeight;
+private:
+	unsigned int VAO;
+	unsigned int VBO;
 };
 
 class RadiosityPlane : public SubdividedPlane
 {
 public:
+	RadiosityPlane(const RadiosityPlane &plane);
+	RadiosityPlane(const SubdividedPlane &plane);
+
+	~RadiosityPlane();
+	
+	void draw(ShaderProgram &shaderProgram) const;
+
+	void generateMesh(glm::vec3 *radiosityVector);
+
+	unsigned int getElementCount() const;
+
+	unsigned int getElementId(float u, float v) const;
+
+	glm::vec3 getElementNodePosition(unsigned int id) const;
+
+	glm::vec3 getNormal() const;
+	glm::vec3 getTangent() const;
+	glm::vec3 getBitangent() const;
 private:
-};*/
+	glm::vec3 normal;
+
+	bool meshGenerated;
+	unsigned int VAO;
+	unsigned int VBO;
+};
 
 #endif // PLANE_HPP

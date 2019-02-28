@@ -18,6 +18,15 @@ public:
 
 	static void render();
 
+	static void enable();
+	static void disable();
+
+	static bool isActive();
+
+	static bool isPopupOpen();
+
+	static void openEditor();
+
 	friend void windowCloseCallback(GLFWwindow *window);
 private:
 	static bool showRenderSettings;
@@ -26,6 +35,8 @@ private:
 	static bool showHelpWindow;
 	static bool showQuitWindow;
 	static bool showSaveWindow;
+
+	static bool enabled;
 
 	static void mainMenuBar();
 	

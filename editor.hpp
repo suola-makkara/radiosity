@@ -10,14 +10,16 @@ public:
 	
 	static void reset();
 
-	static Plane* getHoveredObject();
-	static void setHoveredObject(Plane *object);
+	static SubdividedPlane* getHoveredObject();
+	static void setHoveredObject(SubdividedPlane *object);
 
-	static Plane* getSelectedObject();
-	static void setSelectedObject(Plane *object);
+	static SubdividedPlane* getSelectedObject();
+	static void setSelectedObject(SubdividedPlane *object);
+	
+	static bool viewSubdivisions;
 private:
-	static Plane* hoveredObject;
-	static Plane* selectedObject;
+	static SubdividedPlane* hoveredObject;
+	static SubdividedPlane* selectedObject;
 };
 
 #endif // EDITOR_HPP

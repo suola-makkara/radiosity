@@ -1,9 +1,12 @@
 #ifndef MATRIX_OPERATIONS_HPP
 #define MATRIX_OPERATIONS_HPP
 
+#include <thread>
+#include <mutex>
+
 extern float** genMatrix(unsigned int n);
 
-extern void delMatrix(float **a, unsigned int n);
+extern void deleteMatrix(float **a, unsigned int n);
 
 extern void copyMatrix(float **a, float **b, unsigned int n);
 

@@ -1,15 +1,8 @@
 #ifndef RENDER_SETTINGS_HPP
 #define RENDER_SETTINGS_HPP
 
-#include <mutex>
-
 struct RenderSettings
 {
-	static std::mutex access;
-
-	static bool wireframe;
-	static bool cullFace;
-
 	static unsigned int subdivisionLevel;
 	static float maxSubdivisionSize;
 
@@ -24,19 +17,10 @@ struct RenderSettings
 
 	enum MatrixAlgorithm
 	{
-		LUDecomposition
+		LU_DECOMPOSITION
 	};
 
 	static MatrixAlgorithm matrixAlgorithm;
-
-	enum RadiosityValueInterpolationFunction
-	{
-		LINEAR,
-		CUBIC
-	}
-
-	static RadiosityValueInterpolationFunction
-		radiosityValueInterpolationFunction;
 };
 
 #endif // RENDER_SETTINGS_HPP

@@ -10,7 +10,7 @@ void Scene::loadNew()
 	file = "";
 	saved = false;
 	Editor::reset();
-	objects = std::list<Plane>();
+	objects = std::list<SubdividedPlane>();
 }
 
 glm::vec2 readVec2(std::stringstream &ss);
@@ -24,7 +24,7 @@ void Scene::load(const std::string &file)
 
 	Scene::file = file;
 	Editor::reset();
-	objects = std::list<Plane>();
+	objects = std::list<SubdividedPlane>();
 
 	std::string s;
 	std::stringstream ss;
@@ -49,7 +49,7 @@ void Scene::load(const std::string &file)
 		color = readVec3(ss);
 		emission = readVec3(ss);
 
-		objects.push_back(Plane(position, rotation, size,
+		objects.push_back(SubdividedPlane(position, rotation, size,
 					color, emission));
 	}
 
@@ -94,15 +94,15 @@ bool Scene::isSaved() { return saved; }
 
 void Scene::update() { saved = false; }
 
-std::list<Plane>& Scene::getObjects() { return objects; }
+std::list<SubdividedPlane>& Scene::getObjects() { return objects; }
 
-void Scene::addObject(const Plane &plane)
+void Scene::addObject(const SubdividedPlane &plane)
 {
 	objects.push_back(plane);
 	saved = false;
 }
 
-void Scene::removeObject(Plane *plane)
+void Scene::removeObject(SubdividedPlane *plane)
 {
 	for (auto it = objects.begin(); it != objects.end(); it++)
 		if (&(*it) == plane)
@@ -121,7 +121,7 @@ std::string Scene::file = "";
 
 bool Scene::saved = false;
 
-std::list<Plane> Scene::objects = std::list<Plane>();
+std::list<SubdividedPlane> Scene::objects = std::list<SubdividedPlane>();
 
 
 glm::vec2 readVec2(std::stringstream &ss)

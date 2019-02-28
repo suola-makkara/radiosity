@@ -174,9 +174,48 @@ CMakeFiles/Radiosity.dir/settings.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Radiosity.dir/settings.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/roope/programs/c++/radiosity/settings.cpp -o CMakeFiles/Radiosity.dir/settings.cpp.s
 
+CMakeFiles/Radiosity.dir/render_settings.cpp.o: CMakeFiles/Radiosity.dir/flags.make
+CMakeFiles/Radiosity.dir/render_settings.cpp.o: ../render_settings.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/Radiosity.dir/render_settings.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Radiosity.dir/render_settings.cpp.o -c /home/roope/programs/c++/radiosity/render_settings.cpp
+
+CMakeFiles/Radiosity.dir/render_settings.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Radiosity.dir/render_settings.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/roope/programs/c++/radiosity/render_settings.cpp > CMakeFiles/Radiosity.dir/render_settings.cpp.i
+
+CMakeFiles/Radiosity.dir/render_settings.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Radiosity.dir/render_settings.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/roope/programs/c++/radiosity/render_settings.cpp -o CMakeFiles/Radiosity.dir/render_settings.cpp.s
+
+CMakeFiles/Radiosity.dir/matrix_operations.cpp.o: CMakeFiles/Radiosity.dir/flags.make
+CMakeFiles/Radiosity.dir/matrix_operations.cpp.o: ../matrix_operations.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/Radiosity.dir/matrix_operations.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Radiosity.dir/matrix_operations.cpp.o -c /home/roope/programs/c++/radiosity/matrix_operations.cpp
+
+CMakeFiles/Radiosity.dir/matrix_operations.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Radiosity.dir/matrix_operations.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/roope/programs/c++/radiosity/matrix_operations.cpp > CMakeFiles/Radiosity.dir/matrix_operations.cpp.i
+
+CMakeFiles/Radiosity.dir/matrix_operations.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Radiosity.dir/matrix_operations.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/roope/programs/c++/radiosity/matrix_operations.cpp -o CMakeFiles/Radiosity.dir/matrix_operations.cpp.s
+
+CMakeFiles/Radiosity.dir/radiosity_render_engine.cpp.o: CMakeFiles/Radiosity.dir/flags.make
+CMakeFiles/Radiosity.dir/radiosity_render_engine.cpp.o: ../radiosity_render_engine.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/Radiosity.dir/radiosity_render_engine.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Radiosity.dir/radiosity_render_engine.cpp.o -c /home/roope/programs/c++/radiosity/radiosity_render_engine.cpp
+
+CMakeFiles/Radiosity.dir/radiosity_render_engine.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Radiosity.dir/radiosity_render_engine.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/roope/programs/c++/radiosity/radiosity_render_engine.cpp > CMakeFiles/Radiosity.dir/radiosity_render_engine.cpp.i
+
+CMakeFiles/Radiosity.dir/radiosity_render_engine.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Radiosity.dir/radiosity_render_engine.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/roope/programs/c++/radiosity/radiosity_render_engine.cpp -o CMakeFiles/Radiosity.dir/radiosity_render_engine.cpp.s
+
 CMakeFiles/Radiosity.dir/glad/src/glad.c.o: CMakeFiles/Radiosity.dir/flags.make
 CMakeFiles/Radiosity.dir/glad/src/glad.c.o: ../glad/src/glad.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/Radiosity.dir/glad/src/glad.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object CMakeFiles/Radiosity.dir/glad/src/glad.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Radiosity.dir/glad/src/glad.c.o   -c /home/roope/programs/c++/radiosity/glad/src/glad.c
 
 CMakeFiles/Radiosity.dir/glad/src/glad.c.i: cmake_force
@@ -189,7 +228,7 @@ CMakeFiles/Radiosity.dir/glad/src/glad.c.s: cmake_force
 
 CMakeFiles/Radiosity.dir/imgui/imgui.cpp.o: CMakeFiles/Radiosity.dir/flags.make
 CMakeFiles/Radiosity.dir/imgui/imgui.cpp.o: ../imgui/imgui.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/Radiosity.dir/imgui/imgui.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/Radiosity.dir/imgui/imgui.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Radiosity.dir/imgui/imgui.cpp.o -c /home/roope/programs/c++/radiosity/imgui/imgui.cpp
 
 CMakeFiles/Radiosity.dir/imgui/imgui.cpp.i: cmake_force
@@ -202,7 +241,7 @@ CMakeFiles/Radiosity.dir/imgui/imgui.cpp.s: cmake_force
 
 CMakeFiles/Radiosity.dir/imgui/imgui_draw.cpp.o: CMakeFiles/Radiosity.dir/flags.make
 CMakeFiles/Radiosity.dir/imgui/imgui_draw.cpp.o: ../imgui/imgui_draw.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/Radiosity.dir/imgui/imgui_draw.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/Radiosity.dir/imgui/imgui_draw.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Radiosity.dir/imgui/imgui_draw.cpp.o -c /home/roope/programs/c++/radiosity/imgui/imgui_draw.cpp
 
 CMakeFiles/Radiosity.dir/imgui/imgui_draw.cpp.i: cmake_force
@@ -215,7 +254,7 @@ CMakeFiles/Radiosity.dir/imgui/imgui_draw.cpp.s: cmake_force
 
 CMakeFiles/Radiosity.dir/imgui/imgui_impl_glfw.cpp.o: CMakeFiles/Radiosity.dir/flags.make
 CMakeFiles/Radiosity.dir/imgui/imgui_impl_glfw.cpp.o: ../imgui/imgui_impl_glfw.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/Radiosity.dir/imgui/imgui_impl_glfw.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/Radiosity.dir/imgui/imgui_impl_glfw.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Radiosity.dir/imgui/imgui_impl_glfw.cpp.o -c /home/roope/programs/c++/radiosity/imgui/imgui_impl_glfw.cpp
 
 CMakeFiles/Radiosity.dir/imgui/imgui_impl_glfw.cpp.i: cmake_force
@@ -228,7 +267,7 @@ CMakeFiles/Radiosity.dir/imgui/imgui_impl_glfw.cpp.s: cmake_force
 
 CMakeFiles/Radiosity.dir/imgui/imgui_impl_opengl3.cpp.o: CMakeFiles/Radiosity.dir/flags.make
 CMakeFiles/Radiosity.dir/imgui/imgui_impl_opengl3.cpp.o: ../imgui/imgui_impl_opengl3.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/Radiosity.dir/imgui/imgui_impl_opengl3.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/Radiosity.dir/imgui/imgui_impl_opengl3.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Radiosity.dir/imgui/imgui_impl_opengl3.cpp.o -c /home/roope/programs/c++/radiosity/imgui/imgui_impl_opengl3.cpp
 
 CMakeFiles/Radiosity.dir/imgui/imgui_impl_opengl3.cpp.i: cmake_force
@@ -241,7 +280,7 @@ CMakeFiles/Radiosity.dir/imgui/imgui_impl_opengl3.cpp.s: cmake_force
 
 CMakeFiles/Radiosity.dir/imgui/imgui_widgets.cpp.o: CMakeFiles/Radiosity.dir/flags.make
 CMakeFiles/Radiosity.dir/imgui/imgui_widgets.cpp.o: ../imgui/imgui_widgets.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/Radiosity.dir/imgui/imgui_widgets.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/Radiosity.dir/imgui/imgui_widgets.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Radiosity.dir/imgui/imgui_widgets.cpp.o -c /home/roope/programs/c++/radiosity/imgui/imgui_widgets.cpp
 
 CMakeFiles/Radiosity.dir/imgui/imgui_widgets.cpp.i: cmake_force
@@ -254,7 +293,7 @@ CMakeFiles/Radiosity.dir/imgui/imgui_widgets.cpp.s: cmake_force
 
 CMakeFiles/Radiosity.dir/imgui/imgui_demo.cpp.o: CMakeFiles/Radiosity.dir/flags.make
 CMakeFiles/Radiosity.dir/imgui/imgui_demo.cpp.o: ../imgui/imgui_demo.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/Radiosity.dir/imgui/imgui_demo.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/Radiosity.dir/imgui/imgui_demo.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Radiosity.dir/imgui/imgui_demo.cpp.o -c /home/roope/programs/c++/radiosity/imgui/imgui_demo.cpp
 
 CMakeFiles/Radiosity.dir/imgui/imgui_demo.cpp.i: cmake_force
@@ -276,6 +315,9 @@ Radiosity_OBJECTS = \
 "CMakeFiles/Radiosity.dir/render_engine.cpp.o" \
 "CMakeFiles/Radiosity.dir/editor.cpp.o" \
 "CMakeFiles/Radiosity.dir/settings.cpp.o" \
+"CMakeFiles/Radiosity.dir/render_settings.cpp.o" \
+"CMakeFiles/Radiosity.dir/matrix_operations.cpp.o" \
+"CMakeFiles/Radiosity.dir/radiosity_render_engine.cpp.o" \
 "CMakeFiles/Radiosity.dir/glad/src/glad.c.o" \
 "CMakeFiles/Radiosity.dir/imgui/imgui.cpp.o" \
 "CMakeFiles/Radiosity.dir/imgui/imgui_draw.cpp.o" \
@@ -296,6 +338,9 @@ Radiosity: CMakeFiles/Radiosity.dir/camera.cpp.o
 Radiosity: CMakeFiles/Radiosity.dir/render_engine.cpp.o
 Radiosity: CMakeFiles/Radiosity.dir/editor.cpp.o
 Radiosity: CMakeFiles/Radiosity.dir/settings.cpp.o
+Radiosity: CMakeFiles/Radiosity.dir/render_settings.cpp.o
+Radiosity: CMakeFiles/Radiosity.dir/matrix_operations.cpp.o
+Radiosity: CMakeFiles/Radiosity.dir/radiosity_render_engine.cpp.o
 Radiosity: CMakeFiles/Radiosity.dir/glad/src/glad.c.o
 Radiosity: CMakeFiles/Radiosity.dir/imgui/imgui.cpp.o
 Radiosity: CMakeFiles/Radiosity.dir/imgui/imgui_draw.cpp.o
@@ -309,7 +354,7 @@ Radiosity: /usr/lib/librt.so
 Radiosity: /usr/lib/libm.so
 Radiosity: /usr/lib/libX11.so
 Radiosity: CMakeFiles/Radiosity.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Linking CXX executable Radiosity"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/roope/programs/c++/radiosity/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Linking CXX executable Radiosity"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Radiosity.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

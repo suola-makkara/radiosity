@@ -1,3 +1,6 @@
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
+
 #include <climits>
 #include <iostream>
 
@@ -14,6 +17,10 @@
 #include "gui.hpp"
 #include "scene.hpp"
 #include "editor.hpp"
+#include "render_engine.hpp"
+#include "settings.hpp"
+#include "render_settings.hpp"
+#include "radiosity_render_engine.hpp"
 
 void GUI::initialize(GLFWwindow *window)
 {
@@ -35,6 +42,9 @@ void GUI::destruct()
 
 void GUI::update(GLFWwindow *window)
 {
+	if (isPopupOpen() && RenderEngine::isCameraEnabled())
+		RenderEngine::disableCamera(window);
+
 	// Create New Frame
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
@@ -58,6 +68,21 @@ void GUI::render()
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+void GUI::enable() { enabled = true; }
+void GUI::disable() { enabled = false; }
+
+bool GUI::isActive()
+{
+	ImGuiContext &g = *GImGui;
+	return isPopupOpen() ||
+		ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) ||
+		ImGui::IsAnyItemActive() || g.OpenPopupStack.size() != 0;
+}
+
+bool GUI::isPopupOpen() { return showQuitWindow || showSaveWindow; }
+
+void GUI::openEditor() { showEditor = true; }
+
 bool GUI::showRenderSettings = false;
 bool GUI::showEditor = false;
 bool GUI::showRenderingProgress = false;
@@ -65,45 +90,77 @@ bool GUI::showHelpWindow = false;
 bool GUI::showQuitWindow = false;
 bool GUI::showSaveWindow = false;
 
+bool GUI::enabled = true;
+
 void GUI::renderSettings()
 {
 	if (!showRenderSettings) return;
 	
-	ImGui::SetNextWindowPos({ 10, 40 }, ImGuiCond_Appearing);
-	ImGui::SetNextWindowSize({ 320, 160 }, ImGuiCond_Appearing);
+	ImGui::SetNextWindowPos({ 10.0f, 40.0f }, ImGuiCond_Appearing);
+	ImGui::SetNextWindowSize({ 320.0f, 160.0f }, ImGuiCond_Appearing);
 
-	ImGui::Begin("Render Settings", &showRenderSettings);
+	ImGui::Begin("Render Settings", &showRenderSettings,
+			enabled ? 0 : ImGuiWindowFlags_NoInputs);
 	
 	ImGui::PushItemWidth(ImGui::GetFontSize() * -14);
 
 	if (ImGui::CollapsingHeader("Surface Subdivision"))
 	{
-		static int subDiv = 1;
-		ImGui::DragInt("Subdivision Level", &subDiv, 1, 1, INT_MAX);
-		static float minSubdivisionSize = 0.25f;
-		ImGui::DragFloat("Min Subdivision Size",
-				&minSubdivisionSize, 0.025f, 0.0f, FLT_MAX);
+		bool updateMesh = false;
+		int subdivisionLevel = RenderSettings::subdivisionLevel;
+		if (ImGui::DragInt("Subdivision Level", &subdivisionLevel,
+				1, 1, INT_MAX))
+		{
+			RenderSettings::subdivisionLevel = subdivisionLevel;
+			updateMesh = true;
+		}
+		float maxSubdivisionSize = RenderSettings::maxSubdivisionSize;
+		if (ImGui::DragFloat("Min Subdivision Size",
+				&maxSubdivisionSize, 0.025f, 0.0f, FLT_MAX))
+		{
+			RenderSettings::maxSubdivisionSize = maxSubdivisionSize;
+			updateMesh = true;
+		}
+
+		if (updateMesh)
+		{
+			std::list<SubdividedPlane> &objects = Scene::getObjects();
+			for (auto it = objects.begin(); it != objects.end(); it++)
+				it->updateMesh();
+		}
 	
 		ImGui::Spacing();
 	}
 
 	if (ImGui::CollapsingHeader("Form Factor Calculation"))
 	{
-		const char *algorithms[] {
-			"Diff Area To Area Monte Carlo",
-				"Area To Area Monte Carlo" };
-		static int algorithm = 0;
-		ImGui::Combo("Form Factor Algorithm",
-				&algorithm, algorithms, IM_ARRAYSIZE(algorithms));
+		const char *algorithms[] { "Diff Area To Area Monte Carlo" };
+		static int i = 0;
+		ImGui::Combo("Form Factor Algorithm", &i, algorithms,
+				IM_ARRAYSIZE(algorithms));
 
-		static int samples = 1;
-		ImGui::DragInt("Samples", &samples, 1, 1, INT_MAX);
+		static int samples = RenderSettings::formFactorSamples;
+		if (ImGui::DragInt("Samples", &samples, 1, 1, INT_MAX))
+			RenderSettings::formFactorSamples = samples;
 
 		ImGui::Spacing();
 	}
 
 	if (ImGui::CollapsingHeader("Matrix Calculation"))
 	{
+		const char *algorithms[] { "LU Decomposition" };
+		static int i = 0;
+		ImGui::Combo("Matrix Algorithm", &i, algorithms,
+				IM_ARRAYSIZE(algorithms));
+
+		ImGui::Spacing();
+	}
+
+	if (ImGui::Button("Render"))
+	{
+		RadiosityRenderEngine::initialize();
+		RadiosityRenderEngine::calculate();
+		Settings::mode = Settings::RENDER;
 	}
 
 	ImGui::End();
@@ -113,14 +170,19 @@ void GUI::editor()
 {
 	if (!showEditor) return;
 
-	ImGui::SetNextWindowPos({ 910, 40 }, ImGuiCond_Appearing);
-	ImGui::SetNextWindowSize({ 280, 200 }, ImGuiCond_Appearing);
+	ImGui::SetNextWindowPos({ (float)Settings::windowWidth - 290.0f,
+			40.0f }, ImGuiCond_Appearing);
+	ImGui::SetNextWindowSize({ 280.0f, 340.0f }, ImGuiCond_Appearing);
 
-	ImGui::Begin("Editor", &showEditor);
+	ImGui::Begin("Editor", &showEditor,
+			enabled ? 0 : ImGuiWindowFlags_NoInputs);
+
+	if (ImGui::Button("Toggle Subdivisions"))
+		Editor::viewSubdivisions = !Editor::viewSubdivisions;
 
 	if (ImGui::Button("Add Plane"))
 	{
-		Scene::addObject(Plane());
+		Scene::addObject(SubdividedPlane());
 		Editor::setSelectedObject(&Scene::getObjects().back());
 	}
 
@@ -129,7 +191,7 @@ void GUI::editor()
 	{
 		ImGui::Indent(4);
 
-		Plane *selectedObject = Editor::getSelectedObject();
+		SubdividedPlane *selectedObject = Editor::getSelectedObject();
 
 		if (ImGui::CollapsingHeader("Transformation"))
 		{
@@ -137,12 +199,12 @@ void GUI::editor()
 			glm::vec3 rotation = selectedObject->getRotation();
 			glm::vec2 size = selectedObject->getSize();
 			if (ImGui::DragFloat3("Position", &position.x, 0.1f))
-				selectedObject->setPosition(position);
+				selectedObject->setPosition(position), Scene::update();
 			if (ImGui::DragFloat3("Rotation", &rotation.x,
 						1.0f, -360.0f, 360.0f))
-				selectedObject->setRotation(rotation);
+				selectedObject->setRotation(rotation), Scene::update();
 			if (ImGui::DragFloat2("Size", &size.x, 0.5f, 0.0f, FLT_MAX))
-				selectedObject->setSize(size);
+				selectedObject->setSize(size), Scene::update();
 
 			ImGui::Spacing();
 		}
@@ -152,9 +214,9 @@ void GUI::editor()
 			glm::vec3 color = selectedObject->getColor();
 			glm::vec3 emission = selectedObject->getEmission();
 			if (ImGui::ColorEdit3("Color", &color.x))
-				selectedObject->setColor(color);
-			ImGui::ColorEdit3("Emission", &emission.x);
-				selectedObject->setEmission(emission);
+				selectedObject->setColor(color), Scene::update();
+			if (ImGui::ColorEdit3("Emission", &emission.x))
+				selectedObject->setEmission(emission), Scene::update();
 		}
 
 		ImGui::Spacing();
@@ -169,6 +231,11 @@ void GUI::editor()
 			Editor::reset();
 			Scene::removeObject(selectedObject);
 		}
+		
+		ImGui::SameLine();
+		
+		if (ImGui::Button("Cancel"))
+			Editor::setSelectedObject(nullptr);
 	}
 
 	ImGui::End();
@@ -180,7 +247,8 @@ void GUI::renderingProgress()
 
 	// TODO Implement progress bar & querrying progress
 
-	ImGui::Begin("Rendering Progress", &showRenderingProgress);
+	ImGui::Begin("Rendering Progress", &showRenderingProgress,
+			enabled ? 0 : ImGuiWindowFlags_NoInputs);
 	ImGui::Text("Rendering progress ...");
 	ImGui::End();
 }
@@ -191,14 +259,19 @@ void GUI::helpWindow()
 
 	// TODO Write help text
 
-	ImGui::Begin("Help", &showHelpWindow);
+	ImGui::Begin("Help", &showHelpWindow,
+			enabled ? 0 : ImGuiWindowFlags_NoInputs);
 	ImGui::Text("Help text here!");
 	ImGui::End();
 }
 
 void GUI::quitWindow(GLFWwindow *window)
 {
-	if (!showQuitWindow) return;
+	if (!showQuitWindow || showSaveWindow)
+	{
+		showQuitWindow = false;
+		return;
+	}
 
 	if (Scene::isSaved())
 	{
@@ -262,7 +335,7 @@ void GUI::mainMenuBar()
 {
 	if (ImGui::BeginMainMenuBar())
 	{
-		if (ImGui::BeginMenu("File"))
+		if (ImGui::BeginMenu(Scene::isSaved() ? "File" : "File+", enabled))
 		{
 			if (ImGui::MenuItem("New"))
 				Scene::loadNew();
@@ -307,26 +380,29 @@ void GUI::mainMenuBar()
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("View"))
+		if (ImGui::BeginMenu("View", enabled))
 		{
-			if (ImGui::MenuItem("Editor"))
+			if (ImGui::MenuItem("Editor", NULL, false,
+					Settings::mode == Settings::EDIT))
 				showEditor = true;
-			if (ImGui::MenuItem("Render Settings"))
+			if (ImGui::MenuItem("Render Settings", NULL, false,
+					Settings::mode == Settings::EDIT))
 				showRenderSettings = true;
 			if (ImGui::MenuItem("Rendering Progress"))
 				showRenderingProgress = true;
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("Rendering"))
+		if (ImGui::BeginMenu("Mode", enabled))
 		{
-			ImGui::MenuItem("Render");
-			ImGui::Separator();
-			ImGui::MenuItem("Edit");
+			if (ImGui::MenuItem("Edit"))
+				Settings::mode = Settings::EDIT;
+			if (ImGui::MenuItem("Render"))
+				Settings::mode = Settings::RENDER;
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("Help"))
+		if (ImGui::BeginMenu("Help", enabled))
 		{
 			if (ImGui::MenuItem("Help"))
 				showHelpWindow = true;

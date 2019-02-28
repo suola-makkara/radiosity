@@ -27,8 +27,9 @@ set(SRC
 	render_engine.cpp
 	editor.cpp
 	settings.cpp
-	#render_settings_temp.cpp
-	#matrix_operations.cpp
+	render_settings.cpp
+	matrix_operations.cpp
+	radiosity_render_engine.cpp
 # glad
 	glad/src/glad.c
 # imgui
