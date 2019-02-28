@@ -213,7 +213,7 @@ void SubdividedPlane::updateMesh()
 		setVec3(&vertices[(meshWidth + 1 + y) * 6 + 3], &v1.x);
 	}
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices,
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (meshWidth + meshHeight + 2) * 6, vertices,
 			GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
@@ -304,7 +304,7 @@ void RadiosityPlane::generateMesh(glm::vec3 *radiosityVector)
 
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices,
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * getElementCount() * 36, vertices,
 			GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
