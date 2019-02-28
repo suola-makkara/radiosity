@@ -83,7 +83,7 @@ std::vector<RadiosityPlane> RadiosityRenderEngine::objects =
 std::vector<glm::vec3> RadiosityRenderEngine::radiosityVector =
 	std::vector<glm::vec3>();
 
-std::mutex RadiosityRenderEngine::access = std::mutex();
+std::mutex RadiosityRenderEngine::access;
 
 bool RadiosityRenderEngine::initialized = false;
 bool RadiosityRenderEngine::threadRunning = false;
