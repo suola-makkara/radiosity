@@ -4,7 +4,7 @@
 struct RenderSettings
 {
 	static unsigned int subdivisionLevel;
-	static float maxSubdivisionSize;
+	static float minSubdivisionSize;
 
 	enum FormFactorAlgorithm
 	{

@@ -114,11 +114,11 @@ void GUI::renderSettings()
 			RenderSettings::subdivisionLevel = subdivisionLevel;
 			updateMesh = true;
 		}
-		float maxSubdivisionSize = RenderSettings::maxSubdivisionSize;
+		float minSubdivisionSize = RenderSettings::minSubdivisionSize;
 		if (ImGui::DragFloat("Min Subdivision Size",
-				&maxSubdivisionSize, 0.025f, 0.0f, FLT_MAX))
+				&minSubdivisionSize, 0.025f, 0.0f, FLT_MAX))
 		{
-			RenderSettings::maxSubdivisionSize = maxSubdivisionSize;
+			RenderSettings::minSubdivisionSize = minSubdivisionSize;
 			updateMesh = true;
 		}
 
@@ -288,7 +288,16 @@ void GUI::helpWindow()
 
 	ImGui::Begin("Help", &showHelpWindow,
 			enabled ? 0 : ImGuiWindowFlags_NoInputs);
-	ImGui::Text("Help text here!");
+	ImGui::Text("Open scene [file/open]. 2 example scenes are provided.");
+	ImGui::Text("Edit scene [view/editor].");
+	ImGui::Text("Select object [left mouse]. Cancel [esc].");
+	ImGui::Text("Toggle camera mode [g]. Cancel [esc].");
+	ImGui::Text("Edit render settings [view/render settings].");
+	ImGui::Text("Render scene [view/render settings & render].");
+	ImGui::Text("Change mode edit / render [mode/edit|render].");
+	ImGui::Text("Scene can be edited while rendering.");
+	ImGui::TextWrapped("Program may crash if too high value is used for subdivisionLevel or too small for minSubdivisionSize to see total effect: in edit mode turn subdivision view on to get idea how many subdivisions there are.");
+	ImGui::TextWrapped("If graphics doesn't seem to work make sure shader files are in same folder as executable!");
 	ImGui::End();
 }
 

@@ -11,7 +11,7 @@ public:
 
 	static void render();
 
-	static void updateCamera(GLFWwindow *window);
+	static void updateCamera(GLFWwindow *window, float dt);
 
 	static void enableCamera(GLFWwindow *window);
 	static void disableCamera(GLFWwindow *window);

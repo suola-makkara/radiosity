@@ -54,9 +54,15 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
+	float prevTime = glfwGetTime();
+
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
+		
+		float time = glfwGetTime();
+		float dt = time - prevTime;
+		prevTime = time;
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |
 				GL_STENCIL_BUFFER_BIT);
@@ -67,7 +73,7 @@ int main()
 		else
 			Editor::setHoveredObject(nullptr);
 
-		RenderEngine::updateCamera(window);
+		RenderEngine::updateCamera(window, dt * 1.5f);
 
 		GUI::update(window);
 

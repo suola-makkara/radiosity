@@ -182,10 +182,10 @@ void SubdividedPlane::updateMesh()
 
 	meshWidth = std::max(std::min(RenderSettings::subdivisionLevel,
 				(unsigned int)std::floor(size.x /
-					RenderSettings::maxSubdivisionSize)), 1u);
+					RenderSettings::minSubdivisionSize)), 1u);
 	meshHeight = std::max(std::min(RenderSettings::subdivisionLevel,
 				(unsigned int)std::floor(size.y /
-					RenderSettings::maxSubdivisionSize)), 1u);
+					RenderSettings::minSubdivisionSize)), 1u);
 
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);

@@ -94,8 +94,8 @@ void RenderEngine::render()
 	GUI::render();
 }
 
-void RenderEngine::updateCamera(GLFWwindow *window) {
-	camera.update(window, 0.05f); } // <-- DT
+void RenderEngine::updateCamera(GLFWwindow *window, float dt) {
+	camera.update(window, dt); }
 
 void RenderEngine::enableCamera(GLFWwindow *window)
 {
