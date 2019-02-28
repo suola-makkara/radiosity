@@ -190,7 +190,7 @@ void SubdividedPlane::updateMesh()
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	float vertices[(meshWidth + meshHeight + 2) * 6];
+	float *vertices = new float[(meshWidth + meshHeight + 2) * 6];
 
 	glm::vec3 origin = position - 0.5f * uVec - 0.5f * vVec;
 
@@ -221,6 +221,8 @@ void SubdividedPlane::updateMesh()
 	glEnableVertexAttribArray(0);
 
 	glBindVertexArray(0);
+	
+	delete[] vertices;
 }
 
 void SubdividedPlane::setPosition(const glm::vec3 &position)
@@ -275,7 +277,7 @@ void RadiosityPlane::generateMesh(glm::vec3 *radiosityVector)
 {
 	glm::vec3 origin = position - 0.5f * uVec - 0.5f * vVec;
 
-	float vertices[getElementCount() * 36];
+	float *vertices = new float[getElementCount() * 36];
 
 	glm::vec3 dx = uVec / (float)meshWidth;
 	glm::vec3 dy = vVec / (float)meshHeight;
@@ -315,6 +317,8 @@ void RadiosityPlane::generateMesh(glm::vec3 *radiosityVector)
 	glBindVertexArray(0);
 
 	meshGenerated = true;
+
+	delete[] vertices;
 }
 
 unsigned int RadiosityPlane::getElementCount() const {
